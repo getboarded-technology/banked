@@ -36,6 +36,34 @@ const router = new Router({
           name: "AccountType",
           component: () => import("./views/pages/AccountType.vue"),
         },
+        //organization flow
+        {
+          path: "",
+          name: "OrganizationType",
+          component: () =>
+            import("./views/pages/Organizationflow/OrganizationName.vue"),
+          children: [
+            {
+              path: "/organization/name",
+              name: "ClaimName",
+              component: () =>
+                import("./components/organization/ClaimName.vue"),
+            },
+            {
+              path: "/organization/information",
+              name: "OrganizationInfo",
+              component: () =>
+                import("./components/organization/OrganizationInfo.vue"),
+            }
+          ],
+        },
+        //setup successful
+        {
+          path: "/setup",
+          name: "SetUpCompleted",
+          component: () =>
+            import("./views/pages/SetUpCompleted.vue"),
+        },
       ],
     },
     {
