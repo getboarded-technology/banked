@@ -32,16 +32,17 @@
           <!-- Logo -->
           <router-link
             tag="div"
-            class="vx-logo cursor-pointer flex items-center"
+            class="vx-logo cursor-pointer flex items-end"
             to="/"
           >
-            <logo class="w-10 mr-4 fill-current text-primary" />
-            <span
-              class="vx-logo-text text-primary"
-              v-show="isMouseEnter || !reduce"
+            <logo class="w-10 mr-2 fill-current text-primary" />
+            <h4
+              class="vx-logo-text logo-text font-bold"
+              v-show="isMouseEnter"
               v-if="title"
-              >{{ title }}</span
             >
+              anked
+            </h4>
           </router-link>
           <!-- /Logo -->
 
@@ -49,17 +50,11 @@
           <div>
             <!-- Close Button -->
             <template v-if="showCloseButton">
-              <feather-icon
-                icon="XIcon"
-                class="m-0 cursor-pointer"
-                @click="
-                  $store.commit('TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE', false)
-                "
-              />
+              <feather-icon icon="XIcon" class="m-0 cursor-pointer" />
             </template>
 
             <!-- Toggle Buttons -->
-            <template v-else-if="!showCloseButton && !verticalNavMenuItemsMin">
+            <!-- <template v-else-if="!showCloseButton && !verticalNavMenuItemsMin">
               <feather-icon
                 id="btnVNavMenuMinToggler"
                 class="mr-0 cursor-pointer"
@@ -67,7 +62,7 @@
                 svg-classes="stroke-current text-primary"
                 @click="toggleReduce(!reduce)"
               />
-            </template>
+            </template> -->
           </div>
           <!-- /Menu Toggle Buttons -->
         </div>
@@ -77,10 +72,12 @@
         <div class="shadow-bottom" v-show="showShadowBottom" />
 
         <!-- Menu Items -->
+
         <component
           :is="scrollbarTag"
           ref="verticalNavMenuPs"
-          class="scroll-area-v-nav-menu pt-2"
+          class="scroll-area-v-nav-menu pt-2 mt-12 custom"
+          :class="isMouseEnter || !reduce ? '' : 'items-center'"
           :settings="settings"
           @ps-scroll-y="psSectionScroll"
           @scroll="psSectionScroll"
@@ -97,7 +94,7 @@
             </span>
             <!-- /Group Header -->
 
-            <template v-else-if="!item.header">
+            <template v-else-if="!item.header" class="custom">
               <!-- Nav-Item -->
               <v-nav-menu-item
                 v-if="!item.submenu"
@@ -110,9 +107,12 @@
                 :isDisabled="item.isDisabled"
                 :slug="item.slug"
               >
-                <span v-show="!verticalNavMenuItemsMin" class="truncate">{{
-                  item.name
-                }}</span>
+                <span
+                  v-show="!verticalNavMenuItemsMin"
+                  class="truncate"
+                  :class="activeLink ? 'active-tab-color' : 'text-black'"
+                  >{{ item.name }}</span
+                >
                 <vs-chip
                   class="ml-auto"
                   :color="item.tagColor"
@@ -135,6 +135,7 @@
             </template>
           </template>
         </component>
+
         <!-- /Menu Items -->
       </div>
     </vs-sidebar>
@@ -176,7 +177,7 @@ export default {
   data: () => ({
     clickNotClose: false, // disable close navMenu on outside click
     isMouseEnter: false,
-    reduce: false, // determines if navMenu is reduce - component property
+    reduce: true, // determines if navMenu is reduce - component property
     showCloseButton: false, // show close button in smaller devices
     settings: {
       // perfectScrollbar settings
@@ -258,6 +259,12 @@ export default {
     windowWidth() {
       return this.$store.state.windowWidth;
     },
+    activeLink() {
+      return this.to == this.$route.path ||
+        (this.$route.meta.parent == this.slug && this.to)
+        ? true
+        : false;
+    },
   },
   watch: {
     $route() {
@@ -317,11 +324,13 @@ export default {
       this.showShadowBottom = scroll_el.scrollTop > 0 ? true : false;
     },
     mouseEnter() {
+      console.log("enter", this.isMouseEnter, this.reduce);
       if (this.reduce)
         this.$store.commit("UPDATE_VERTICAL_NAV_MENU_ITEMS_MIN", false);
       this.isMouseEnter = true;
     },
     mouseLeave() {
+      console.log("leve", this.isMouseEnter, this.reduce);
       if (this.reduce)
         this.$store.commit("UPDATE_VERTICAL_NAV_MENU_ITEMS_MIN", true);
       this.isMouseEnter = false;
@@ -417,6 +426,7 @@ export default {
     toggleReduce(val) {
       this.reduceButton = val;
       this.setVerticalNavMenuWidth();
+      console.log(val);
     },
   },
   mounted() {
@@ -428,4 +438,16 @@ export default {
 
 <style lang="scss">
 @import "@/assets/scss/vuexy/components/verticalNavMenu.scss";
+.logo-text {
+  color: #1b1b1b;
+  font-size: 2.75em !important;
+}
+.custom {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.active-tab-color {
+  color: #f2c244;
+}
 </style>

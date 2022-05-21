@@ -72,14 +72,14 @@
         :class="activeStep > 1 ? 'justify-end btns' : 'justify-center'"
       >
         <vs-button color="#B3BAC4" type="border" @click="previousStep"
-          >Previous{{ activeStep }}</vs-button
+          >Previous</vs-button
         >
         <vs-button
           @click="nextStep"
           color="#f8be17"
           class="connect__wallet__btn font-semibold text-black"
         >
-          Continue {{ this.routePath }}
+          Continue
         </vs-button>
       </div>
     </div>
@@ -141,24 +141,17 @@ export default {
       }
     },
   },
-  // updated() {
-  //   let path = this.$router.currentRoute.path;
-  //   console.log(path);
-  //   if (path === "/organization/information") {
-  //     this.activeStep = 2;
-  //   } else if (path === "/organization/name") {
-  //     this.activeStep = 1;
-  //   }
-  // },
-  // mounted() {
-  //   let path = this.$router.currentRoute.path;
-  //   console.log(path);
-  //   if (path === "/organization/information") {
-  //     this.activeStep = 2;
-  //   } else if (path === "/organization/name") {
-  //     this.activeStep = 1;
-  //   }
-  // },
+  watch: {
+    $route(to, from) {
+      console.log(to, from);
+      if (to.name === "ClaimName") {
+        console.log('1');
+        this.activeStep = 1;
+      }else{
+        this.activeStep = 2;
+      }
+    },
+  },
 };
 </script>
 

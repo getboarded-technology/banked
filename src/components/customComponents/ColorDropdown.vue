@@ -22,16 +22,20 @@ export default {
   data() {
     return {
       active: false,
-      selectedColor: "",
-      selectedColorName: "",
+      selectedColor: "#F7941D",
+      selectedColorName: "Orange",
       colors: colorOptions,
+      orgData: {
+        themeColor: {
+          name: this.selectedColorName,
+          code: this.selectedColor,
+        },
+      },
     };
   },
   computed: {
     selector() {
-      if (!this.selectedColor) {
-        return "Color";
-      } else {
+      if (this.selectedColor) {
         return (
           '<span style="padding: 0.3em 1em;margin : 0.5em;border-radius: 5px; background: ' +
           this.selectedColor +
@@ -45,7 +49,10 @@ export default {
     setColor(color, colorName) {
       this.selectedColor = color;
       this.selectedColorName = colorName;
+      this.orgData.themeColor.name = colorName;
+      this.orgData.themeColor.code = color;
       this.active = false;
+      console.log(this.orgData);
     },
     toggleDropdown() {
       this.active = !this.active;
@@ -66,13 +73,15 @@ export default {
 .wrapper-dropdown > span {
   width: 100%;
   display: block;
- border: 1px solid rgba(0, 0, 0, 0.2);
- color: #666666;
- border-radius: 5px;  padding:0.7rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #666666;
+  border-radius: 5px;
+  padding: 0.7rem;
 }
-.wrapper-dropdown > span:active,:focus {
- border: 1px solid #F8BE17;
- box-shadow: 0 0 0 0 rgb(0 0 0 / 15%);
+.wrapper-dropdown > span:active,
+:focus {
+  border: 1px solid #f8be17;
+  box-shadow: 0 0 0 0 rgb(0 0 0 / 15%);
 }
 .wrapper-dropdown > span > span {
   padding: 0 12px;

@@ -4,9 +4,29 @@
       <h3 class="text-black font-bold text-4xl">Organization Information</h3>
       <section class="flex md:pt-8">
         <div class="w-1/2">
-          <small class="w-4/5 flex justify-center"
-            ><img src="@/assets/images/pages/organization/uploadPic.png" alt=""
-          /></small>
+          <small class="w-4/5 flex justify-center overflow-hidden relative">
+            <input
+              type="file"
+              class="hidden"
+              accept="image/*"
+              @change="handleImageUpload"
+              ref="imageUploader"
+            /><img
+              class="uploaded-img"
+              @click="() => $refs.imageUploader.click()"
+              :src="orgData.img ? orgData.img : uploadImg"
+              alt="Upload Image"
+              style="cursor: pointer"
+            />
+            <span class="flex items-end" style="cursor: pointer">
+              <vs-icon
+                v-if="orgData.img"
+                @click="orgData.img = ''"
+                color="#E1433E"
+                size="25px"
+                icon="delete"
+            /></span>
+          </small>
 
           <small
             ><div class="font-bold text-black my-4 text-xl">Theme Color</div>
@@ -14,10 +34,16 @@
           </small>
           <small
             ><div class="font-bold text-black my-4 text-xl">Location</div>
-            <ColorPicker id="color-picker" />
+            <v-select
+              v-model="orgData.location"
+              label="name"
+              :options="countries"
+            ></v-select>
           </small>
           <small
-            ><div class="font-bold text-black my-4 text-xl">Location</div>
+            ><div class="font-bold text-black my-4 text-xl">
+              Community Links
+            </div>
             <ColorPicker id="color-picker" />
           </small>
         </div>
@@ -26,29 +52,35 @@
             ><div class="font-bold text-black my-4 text-xl">
               Organization Name
             </div>
-            <vs-input class="w-4/5" color="#f2c244" v-model="value4"
+            <vs-input class="w-4/5" color="#f2c244" v-model="orgData.name"
           /></small>
 
-          <small
+          <!-- <small
             ><div class="font-bold text-black my-4 text-xl">
               Organization Domain
             </div>
             <vs-input class="w-4/5" color="#f2c244" v-model="value4"
-          /></small>
+          /></small> -->
 
           <small
             ><div class="font-bold text-black my-4 text-xl">Website</div>
-            <vs-input class="w-4/5" color="#f2c244" v-model="value4"
+            <vs-input class="w-4/5" color="#f2c244" v-model="orgData.website"
           /></small>
 
           <small
             ><div class="font-bold text-black my-4 text-xl">Work Email</div>
-            <vs-input class="w-4/5" color="#f2c244" v-model="value4"
-          /></small>
+            <vs-input
+              v-validate:orgData.email="'required|email'"
+              data-vv-validate-on="blur"
+              class="w-4/5"
+              color="#f2c244"
+              v-model="orgData.email"
+          />
+          </small>
 
           <small
             ><div class="font-bold text-black my-4 text-xl">About</div>
-            <vs-input class="w-4/5" color="#f2c244" v-model="value4"
+            <vs-textarea class="w-4/5" color="#f2c244" v-model="orgData.about"
           /></small>
         </div>
       </section>
@@ -90,23 +122,41 @@
 
 <script>
 import ColorPicker from "../../components/customComponents/ColorDropdown.vue";
+import vSelect from "vue-select";
+import uploadImg from "../../assets/images/pages/organization/uploadPic.png";
+import countries from "@/assets/data/countries.js";
 
 export default {
   name: "OrganizationInfo",
   components: {
     ColorPicker,
+    vSelect,
   },
-
   props: ["stepNumber"],
   data() {
     return {
       userName: "",
+      uploadImg: uploadImg,
+      countries: countries,
       popup: true,
+      orgData: {
+        img: "",
+        location: {},
+        communityLinks: {},
+        email: "",
+        website: "",
+        about: "",
+      },
     };
   },
   methods: {
     showPopup() {
       this.popup = !this.popup;
+    },
+    handleImageUpload(e) {
+      const file = e.target.files[0];
+      this.orgData.img = URL.createObjectURL(file);
+      console.log(this.orgData);
     },
   },
 };
@@ -148,6 +198,13 @@ export default {
   }
 }
 
+.uploaded-img {
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 @media only screen and (max-width: 991px) {
   .info__detail {
     padding: 2.5rem;
@@ -165,5 +222,8 @@ export default {
 .vselect >>> li:hover,
 li::selection {
   background: #f8be17;
+}
+.v-select {
+  width: 80%;
 }
 </style>

@@ -40,7 +40,6 @@ export default {
     border-radius: 10px;
     background: #eeeeee;
     color: #8692a6;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   }
 }
 

@@ -81,15 +81,15 @@
                 </div>
 
                 <!-- BREADCRUMB -->
-                <vx-breadcrumb
+                <!-- <vx-breadcrumb
                   class="ml-4 md:block hidden"
                   v-if="$route.meta.breadcrumb"
                   :route="$route"
                   :isRTL="$vs.rtl"
-                />
+                /> -->
 
                 <!-- DROPDOWN -->
-                <vs-dropdown
+                <!-- <vs-dropdown
                   vs-trigger-click
                   class="ml-auto md:block hidden cursor-pointer"
                 >
@@ -136,7 +136,7 @@
                       </div>
                     </vs-dropdown-item>
                   </vs-dropdown-menu>
-                </vs-dropdown>
+                </vs-dropdown> -->
               </div>
             </transition>
 

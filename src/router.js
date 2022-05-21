@@ -54,15 +54,14 @@ const router = new Router({
               name: "OrganizationInfo",
               component: () =>
                 import("./components/organization/OrganizationInfo.vue"),
-            }
+            },
           ],
         },
         //setup successful
         {
           path: "/setup",
           name: "SetUpCompleted",
-          component: () =>
-            import("./views/pages/SetUpCompleted.vue"),
+          component: () => import("./views/pages/SetUpCompleted.vue"),
         },
       ],
     },
@@ -76,11 +75,30 @@ const router = new Router({
         // =============================================================================
         // Theme Routes
         // =============================================================================
-
         {
-          path: "/page2",
-          name: "page-2",
-          component: () => import("./views/Page2.vue"),
+          path: "/user/explore-organization",
+          name: "ExploreOrganization",
+          component: () =>
+            import("./views/pages/userflow/ExploreOrganization.vue"),
+          meta: {
+            breadcrumb: [{ title: "Explore Organization" }],
+          },
+        },
+        {
+          path: "/user/yield-farm",
+          name: "YieldFarm",
+          component: () => import("./views/pages/userflow/YieldFarm.vue"),
+          meta: {
+            breadcrumb: [{ title: "Yield Farm" }],
+          },
+        },
+        {
+          path: "/user/wallet",
+          name: "Wallet",
+          component: () => import("./views/pages/userflow/Wallet.vue"),
+          meta: {
+            breadcrumb: [{ title: "Wallet" }],
+          },
         },
       ],
     },

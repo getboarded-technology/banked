@@ -37,7 +37,7 @@
       <div
         v-for="(accontType, index) in accontTypes"
         class="content__detail__box md:py-5 md:px-3"
-        @click="$router.push(accontType.routeTo)"
+        @click="setFlow(accontType)"
         :key="index"
       >
         <div class="flex items-center">
@@ -74,18 +74,25 @@ export default {
       accontTypes: [
         {
           routeTo: "",
-          type: "Personal",
+          type: "personal",
           about: "I want to create a personal profile",
           imgSrc: personal,
         },
         {
           routeTo: "/organization/name",
-          type: "Organization",
+          type: "organization",
           about: "I want to create an Organization",
           imgSrc: organization,
         },
       ],
     };
+  },
+  methods: {
+    setFlow(data) {
+      this.$store.dispatch("setAccountType", data.type);
+      this.$router.push(data.routeTo);
+      console.log(this.$store);
+    },
   },
 };
 </script>
@@ -127,7 +134,7 @@ export default {
   border-radius: 16px;
 }
 
-.wallet__btn{
+.wallet__btn {
   position: absolute;
   right: 2em;
 }
