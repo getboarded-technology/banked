@@ -73,7 +73,7 @@ export default {
     return {
       accontTypes: [
         {
-          routeTo: "",
+          routeTo: "/user/yield-farm",
           type: "personal",
           about: "I want to create a personal profile",
           imgSrc: personal,

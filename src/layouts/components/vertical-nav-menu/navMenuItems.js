@@ -23,9 +23,9 @@ import store from "../../../store/store";
 
 var accountType = "personal";
 if (accountType === "personal") {
-  var accountTypes = "user";
+  var accountTypeRoute = "user";
 }
-console.log(store, accountTypes);
+console.log(store, accountTypeRoute);
 
 export default [
   {
@@ -35,19 +35,19 @@ export default [
     icon: dashboard,
   },
   {
-    url: `/${accountTypes}/explore-organization`,
+    url: `/${accountTypeRoute}/explore-organization`,
     name: "Explore Organization",
     slug: "",
     icon: explore,
   },
   {
-    url: `/${accountTypes}/wallet`,
-    name: "Wallet",
+    url: `/${accountTypeRoute}/wallet`,
+    name: `${accountTypeRoute === "user" ? `Wallet` : `Treasury`}`,
     slug: "",
     icon: wallet,
   },
   {
-    url: `/${accountTypes}/yield-farm`,
+    url: `/${accountTypeRoute}/yield-farm`,
     name: "Yield Farm",
     slug: "",
     icon: tractor,

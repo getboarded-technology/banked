@@ -106,6 +106,9 @@ export default {
       this.pageTitle = to.meta.breadcrumb[0].title;
     },
   },
+  created(){
+    this.pageTitle = this.$route.meta.breadcrumb[0].title;
+  }
 };
 </script>
 

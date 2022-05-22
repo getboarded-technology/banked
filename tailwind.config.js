@@ -44,7 +44,6 @@ View the full documentation at https://tailwindcss.com.
 */
 
 module.exports = {
-
   important: true,
   // prefix: '',
   // separator: ':',
