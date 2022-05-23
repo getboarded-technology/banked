@@ -120,23 +120,25 @@ export default {
       this.wallet = !this.wallet;
     },
     async connectMetaMask(web3) {
-     const provider = window.ethereum.providers.find((provider) => provider.isMetaMask);
-     console.log(provider);
-        const accounts = await provider.request({
+      const provider = window.ethereum.providers.find(
+        (provider) => provider.isMetaMask
+      );
+      console.log(provider);
+      const accounts = await provider.request({
         method: "eth_requestAccounts",
       });
       const account = accounts[0];
-      console.log(account);
-      const coinbase = await web3.eth.getCoinbase();
-      if (!coinbase) {
-        this.$vs.notify({
-          title: this.$t("Login.notify.title"),
-          text: this.$t("Metamasklogin.activate"),
-          iconPack: "feather",
-          icon: "icon-alert-circle",
-          color: "warning",
-        });
-      }
+      // console.log(account);
+      // const coinbase = await web3.eth.getCoinbase();
+      // if (!coinbase) {
+      //   this.$vs.notify({
+      //     title: this.$t("Login.notify.title"),
+      //     text: this.$t("Metamasklogin.activate"),
+      //     iconPack: "feather",
+      //     icon: "icon-alert-circle",
+      //     color: "warning",
+      //   });
+      // }
       return (this.publicAddress = account.toLowerCase());
     },
     async walletConnect(web3) {
@@ -194,8 +196,8 @@ export default {
           color: "warning",
         });
       }
-      this.publicAddress = account.toLowerCase();
-      console.log(this.publicAddress);
+      console.log("g", this.publicAddress);
+      return (this.publicAddress = account.toLowerCase());
     },
     walletUse(type) {
       const web3 = new Web3(Web3.givenProvider);
@@ -208,18 +210,14 @@ export default {
           color: "warning",
         });
       } else {
-        console.log(type);
+        console.log("rg", this.publicAddress);
         if (type === "metamask") {
           this.connectMetaMask(web3);
-          return
         } else if (type === "walletConnect") {
           this.walletConnect(web3);
-          return
         } else {
           this.connectCoinbase(web3);
-          return
         }
-
         this.$store.dispatch("updateWalletInfo", {
           walletAddress: this.publicAddress,
         });
