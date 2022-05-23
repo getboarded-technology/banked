@@ -16,7 +16,7 @@
         Next, setup your visibility and start inviting your Admin Team
       </p>
       <vs-button class="md:mt-10"
-        ><span class="font-semibold">Continue</span></vs-button
+        ><span class="font-semibold" @click="$router.push('/user/explore-organization');">Continue</span></vs-button
       >
     </div>
   </div>
