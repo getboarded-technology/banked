@@ -173,7 +173,7 @@ export default {
       // Initialize Coinbase Wallet SDK
       const coinbaseWallet = new CoinbaseWalletSDK({
         appName: "BANKED",
-        appLogoUrl: "@/assets/images/wallet/Coinbase.svg",
+        appLogoUrl: "../../assets/images/wallet/Coinbase.svg",
         darkMode: false,
       });
 
@@ -186,16 +186,17 @@ export default {
         method: "eth_requestAccounts",
       });
       const account = accounts[0];
-      const coinbase = await web3.eth.getCoinbase();
-      if (!coinbase) {
-        this.$vs.notify({
-          title: this.$t("Login.notify.title"),
-          text: this.$t("Metamasklogin.activate"),
-          iconPack: "feather",
-          icon: "icon-alert-circle",
-          color: "warning",
-        });
-      }
+      console.log(account);
+      // const coinbase = await web3.eth.getCoinbase();
+      // if (!coinbase) {
+      //   this.$vs.notify({
+      //     title: this.$t("Login.notify.title"),
+      //     text: this.$t("Metamasklogin.activate"),
+      //     iconPack: "feather",
+      //     icon: "icon-alert-circle",
+      //     color: "warning",
+      //   });
+      // }
       console.log("g", this.publicAddress);
       return (this.publicAddress = account.toLowerCase());
     },
