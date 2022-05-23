@@ -82,6 +82,7 @@ import coinbase from "@/assets/images/wallet/Coinbase.svg";
 import walletconnect from "@/assets/images/wallet/WalletConnect.svg";
 import Web3 from "web3";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 
 export default {
   name: "ConnectWalletButton",
@@ -119,10 +120,13 @@ export default {
       this.wallet = !this.wallet;
     },
     async connectMetaMask(web3) {
-      const accounts = await ethereum.request({
+     const provider = window.ethereum.providers.find((provider) => provider.isMetaMask);
+     console.log(provider);
+        const accounts = await provider.request({
         method: "eth_requestAccounts",
       });
       const account = accounts[0];
+      console.log(account);
       const coinbase = await web3.eth.getCoinbase();
       if (!coinbase) {
         this.$vs.notify({
@@ -145,6 +149,7 @@ export default {
         },
       });
       await provider.enable();
+
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -163,7 +168,34 @@ export default {
       console.log(this.publicAddress);
     },
     async connectCoinbase(web3) {
-      //omkar
+      // Initialize Coinbase Wallet SDK
+      const coinbaseWallet = new CoinbaseWalletSDK({
+        appName: "BANKED",
+        appLogoUrl: "@/assets/images/wallet/Coinbase.svg",
+        darkMode: false,
+      });
+
+      // Initialize a Web3 Provider object
+      const ethereum = coinbaseWallet.makeWeb3Provider(
+        "https://mainnet.infura.io/v3/97e74bd317314078b07820c97fabd54d",
+        1
+      );
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const account = accounts[0];
+      const coinbase = await web3.eth.getCoinbase();
+      if (!coinbase) {
+        this.$vs.notify({
+          title: this.$t("Login.notify.title"),
+          text: this.$t("Metamasklogin.activate"),
+          iconPack: "feather",
+          icon: "icon-alert-circle",
+          color: "warning",
+        });
+      }
+      this.publicAddress = account.toLowerCase();
+      console.log(this.publicAddress);
     },
     walletUse(type) {
       const web3 = new Web3(Web3.givenProvider);
@@ -179,10 +211,13 @@ export default {
         console.log(type);
         if (type === "metamask") {
           this.connectMetaMask(web3);
+          return
         } else if (type === "walletConnect") {
           this.walletConnect(web3);
+          return
         } else {
-          this.connectCoinbase; //temp
+          this.connectCoinbase(web3);
+          return
         }
 
         this.$store.dispatch("updateWalletInfo", {

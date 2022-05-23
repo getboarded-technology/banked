@@ -85,17 +85,20 @@
         <!-- transaction type  -->
         <div class="overlay__inner__transaction__type px-8">saqssd</div>
         <!-- select coin  -->
-        <v-select :items="items" label="Standard">
-          <template v-slot:selection="{ item, index }">
-            <img :src="item.image" />{{ item.name }} {{ index }}</template
-          >
-          <template v-slot:item="{ item }"
-            ><img :src="item.image" />{{ item.name }}</template
-          >
+        <v-select
+          v-model="select"
+          :items="countries"
+          label="Select"
+          item-text="name"
+        >
+          <template v-slot:item="slotProps">
+            <i :class="['mr-2', 'em', slotProps.item.flag]"></i>
+            {{ slotProps.item.name }}
+          </template>
         </v-select>
+        <!--// select coin  -->
       </div>
     </div>
-
     <!--// Transaction popup  -->
   </div>
 </template>
@@ -104,33 +107,38 @@
 import DepositPopup from "../../../components/organization/DepositPopup.vue";
 import vSelect from "vue-select";
 export default {
-  components: { DepositPopup, vSelect },
+  components: { DepositPopup, "v-select": vSelect },
   data() {
     return {
       worth: {},
       hover: false,
+      select: null,
       transactionPopup: false,
       transactionPopupType: "",
-      items: [
+      countries: [
         {
-          name: "Foo",
-          image:
-            "https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG",
+          name: "Andorra",
+          flag: "em-flag-ad",
         },
         {
-          name: "Bar",
-          image:
-            "https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG",
+          name: "Arab Emirates",
+          flag: "em-flag-ae",
         },
         {
-          name: "Hoo",
-          image:
-            "https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG",
+          name: "Afghanistan",
+          flag: "em-flag-af",
         },
         {
-          name: "Coo",
-          image:
-            "https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG",
+          name: "Antigua & Barbuda",
+          flag: "em-flag-ag",
+        },
+        {
+          name: "Albania",
+          flag: "em-flag-al",
+        },
+        {
+          name: "Anguilla",
+          flag: "em-flag-ai",
         },
       ],
       itemsa: [
