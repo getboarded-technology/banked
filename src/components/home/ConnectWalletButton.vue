@@ -80,9 +80,12 @@
 import metamask from "@/assets/images/wallet/Metamask.svg";
 import coinbase from "@/assets/images/wallet/Coinbase.svg";
 import walletconnect from "@/assets/images/wallet/WalletConnect.svg";
+import unstopableDomain from "@/assets/images/wallet/unstopableDomains.svg";
 import Web3 from "web3";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
+import UAuth from "@uauth/js";
+import constants from "../../../constants";
 
 export default {
   name: "ConnectWalletButton",
@@ -105,6 +108,11 @@ export default {
           name: "Coinbase Wallet",
           imgSrc: coinbase,
         },
+        {
+          type: "unstopableDomain",
+          name: "Connect Unstoppable Domains",
+          imgSrc: unstopableDomain,
+        },
       ],
       publicAddress: "",
       coinbase: "",
@@ -120,8 +128,9 @@ export default {
       this.wallet = !this.wallet;
     },
     async connectMetaMask(web3) {
-      const provider = window.ethereum.providers.find(
-        (provider) => provider.isMetaMask
+      // console.log(window);
+      let provider = window.ethereum.providers.find(
+        ({ isMetaMask }) => isMetaMask
       );
       console.log(provider);
       const accounts = await provider.request({
@@ -200,6 +209,22 @@ export default {
       console.log("g", this.publicAddress);
       return (this.publicAddress = account.toLowerCase());
     },
+    async connectunstopableDomain() {
+      const uauth = new UAuth({
+        clientID: "332bb91f-49d2-4dae-ae6a-896a38905409",
+        redirectUri: "http://localhost",
+      });
+
+      uauth
+        .login()
+        .then((user) => {
+          // user exists
+          console.log("User information:", user);
+        })
+        .catch(() => {
+          // user does not exist
+        });
+    },
     walletUse(type) {
       const web3 = new Web3(Web3.givenProvider);
       if (!web3.givenProvider) {
@@ -211,13 +236,14 @@ export default {
           color: "warning",
         });
       } else {
-        console.log("rg", this.publicAddress);
         if (type === "metamask") {
           this.connectMetaMask(web3);
         } else if (type === "walletConnect") {
           this.walletConnect(web3);
-        } else {
+        } else if (type === "coinbaseWallet") {
           this.connectCoinbase(web3);
+        } else {
+          this.connectunstopableDomain();
         }
         this.$store.dispatch("updateWalletInfo", {
           walletAddress: this.publicAddress,
