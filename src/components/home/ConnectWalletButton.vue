@@ -83,6 +83,8 @@ import walletconnect from "@/assets/images/wallet/WalletConnect.svg";
 import Web3 from "web3";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
+import UAuth from "@uauth/js";
+import constants from '../../../constants';
 
 export default {
   name: "ConnectWalletButton",
@@ -200,34 +202,50 @@ export default {
       console.log("g", this.publicAddress);
       return (this.publicAddress = account.toLowerCase());
     },
-    walletUse(type) {
-      const web3 = new Web3(Web3.givenProvider);
-      if (!web3.givenProvider) {
-        this.$vs.notify({
-          title: this.$t("Login.notify.title"),
-          text: this.$t("Metamasklogin.install"),
-          iconPack: "feather",
-          icon: "icon-alert-circle",
-          color: "warning",
+    async walletUse(){
+      const uauth = new UAuth({
+          clientID: "332bb91f-49d2-4dae-ae6a-896a38905409",
+          redirectUri: "http://localhost:8080/"
+      });
+
+      uauth
+        .login()
+        .then((user) => {
+          // user exists
+          console.log("User information:", user);
+        })
+        .catch(() => {
+          // user does not exist
         });
-      } else {
-        console.log("rg", this.publicAddress);
-        if (type === "metamask") {
-          this.connectMetaMask(web3);
-        } else if (type === "walletConnect") {
-          this.walletConnect(web3);
-        } else {
-          this.connectCoinbase(web3);
-        }
-        this.$store.dispatch("updateWalletInfo", {
-          walletAddress: this.publicAddress,
-        });
-        if (this.walletAddress) {
-          this.wallet = false;
-          this.$router.push("/account-type");
-        }
-      }
     },
+    // walletUse(type) {
+    //   const web3 = new Web3(Web3.givenProvider);
+    //   if (!web3.givenProvider) {
+    //     this.$vs.notify({
+    //       title: this.$t("Login.notify.title"),
+    //       text: this.$t("Metamasklogin.install"),
+    //       iconPack: "feather",
+    //       icon: "icon-alert-circle",
+    //       color: "warning",
+    //     });
+    //   } else {
+    //     console.log("rg", this.publicAddress);
+    //     if (type === "metamask") {
+    //       this.connectMetaMask(web3);
+    //     } else if (type === "walletConnect") {
+    //       this.walletConnect(web3);
+    //     } else {
+    //       this.connectCoinbase(web3);
+    //     }
+    //     this.$store.dispatch("updateWalletInfo", {
+    //       walletAddress: this.publicAddress,
+    //     });
+    //     if (this.walletAddress) {
+    //       this.wallet = false;
+    //       this.$router.push("/account-type");
+    //     }
+    //   }
+    // },
   },
 };
 </script>
