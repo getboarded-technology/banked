@@ -148,7 +148,14 @@ export default {
       //     color: "warning",
       //   });
       // }
-      return (this.publicAddress = account.toLowerCase());
+      this.publicAddress = account.toLowerCase();
+      this.$store.dispatch("updateWalletInfo", {
+        walletAddress: this.publicAddress,
+      });
+      if (this.walletAddress.slice(0, 5)) {
+        this.$router.push("/account-type");
+        this.wallet = false;
+      }
     },
     async walletConnect(web3) {
       const provider = new WalletConnectProvider({
@@ -176,7 +183,14 @@ export default {
         });
       }
       this.publicAddress = account.toLowerCase();
-      console.log(this.publicAddress);
+      this.publicAddress = account.toLowerCase();
+      this.$store.dispatch("updateWalletInfo", {
+        walletAddress: this.publicAddress,
+      });
+      if (this.walletAddress.slice(0, 5)) {
+        this.$router.push("/account-type");
+        this.wallet = false;
+      }
     },
     async connectCoinbase(web3) {
       // Initialize Coinbase Wallet SDK
@@ -206,8 +220,15 @@ export default {
       //     color: "warning",
       //   });
       // }
-      console.log("g", this.publicAddress);
-      return (this.publicAddress = account.toLowerCase());
+      this.publicAddress = account.toLowerCase();
+      this.publicAddress = account.toLowerCase();
+      this.$store.dispatch("updateWalletInfo", {
+        walletAddress: this.publicAddress,
+      });
+      if (this.walletAddress.slice(0, 5)) {
+        this.$router.push("/account-type");
+        this.wallet = false;
+      }
     },
     async connectunstopableDomain() {
       const uauth = new UAuth({
@@ -244,13 +265,6 @@ export default {
           this.connectCoinbase(web3);
         } else {
           this.connectunstopableDomain();
-        }
-        this.$store.dispatch("updateWalletInfo", {
-          walletAddress: this.publicAddress,
-        });
-        if (this.walletAddress) {
-          this.wallet = false;
-          this.$router.push("/account-type");
         }
       }
     },
