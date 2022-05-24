@@ -85,7 +85,7 @@ import Web3 from "web3";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import UAuth from "@uauth/js";
-import constants from "../../../constants";
+// import constants from "../../../constants";
 
 export default {
   name: "ConnectWalletButton",
