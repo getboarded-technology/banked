@@ -11,7 +11,7 @@
       <div class="my-4 text-lg font-medium" style="color: #8692a6">
         Organization’s Name
       </div>
-      <vs-input class="inputx" placeholder="Placeholder" v-model="value1" />
+      <vs-input @click="connectunstopableDomain" class="inputx" placeholder="Placeholder" v-model="value1" />
     </div>
 
     <div class="claim__name__detail__para">
@@ -23,8 +23,27 @@
 </template>
 
 <script>
+import UAuth from "@uauth/js";
 export default {
   name: "ClaimName",
+  methods: {
+    async connectunstopableDomain() {
+      const uauth = new UAuth({
+        clientID: "332bb91f-49d2-4dae-ae6a-896a38905409",
+        redirectUri: "http://localhost",
+      });
+
+      uauth
+        .login()
+        .then((user) => {
+          // user exists
+          console.log("User information:", user);
+        })
+        .catch(() => {
+          // user does not exist
+        });
+    },
+  },
 };
 </script>
 
