@@ -127,13 +127,51 @@ export default {
     showWallets() {
       this.wallet = !this.wallet;
     },
-    async connectMetaMask(web3) {
-      // console.log(window);
-      let provider = window.ethereum.providers.find(
-        ({ isMetaMask }) => isMetaMask
+    async connectCoinbase(web3) {
+      // Initialize Coinbase Wallet SDK
+      const coinbaseWallet = new CoinbaseWalletSDK({
+        appName: "BANKED",
+        appLogoUrl: "../../assets/images/wallet/Coinbase.svg",
+        darkMode: false,
+      });
+
+      // Initialize a Web3 Provider object
+      const ethereum = coinbaseWallet.makeWeb3Provider(
+        "https://mainnet.infura.io/v3/97e74bd317314078b07820c97fabd54d",
+        1
       );
-      console.log(provider);
-      const accounts = await provider.request({
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const account = accounts[0];
+      // const coinbase = await web3.eth.getCoinbase();
+      // if (!coinbase) {
+      //   this.$vs.notify({
+      //     title: this.$t("Login.notify.title"),
+      //     text: this.$t("Metamasklogin.activate"),
+      //     iconPack: "feather",
+      //     icon: "icon-alert-circle",
+      //     color: "warning",
+      //   });
+      // }
+      this.publicAddress = account.toLowerCase();
+      this.publicAddress = account.toLowerCase();
+      this.$store.dispatch("updateWalletInfo", {
+        walletAddress: this.publicAddress,
+      });
+      if (this.walletAddress.slice(0, 5)) {
+        this.$router.push("/account-type");
+        this.wallet = false;
+      }
+    },
+    async connectMetaMask(web3) {
+      // console.log(window.ethereum);
+      // const provider = window.ethereum.providers.find(
+      //   (provider) => provider.isCoinbaseWallet
+      // );
+      // console.log(provider);
+      this.coinbase = false;
+      const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
       const account = accounts[0];
@@ -192,48 +230,11 @@ export default {
         this.wallet = false;
       }
     },
-    async connectCoinbase(web3) {
-      // Initialize Coinbase Wallet SDK
-      const coinbaseWallet = new CoinbaseWalletSDK({
-        appName: "BANKED",
-        appLogoUrl: "../../assets/images/wallet/Coinbase.svg",
-        darkMode: false,
-      });
 
-      // Initialize a Web3 Provider object
-      const ethereum = coinbaseWallet.makeWeb3Provider(
-        "https://mainnet.infura.io/v3/97e74bd317314078b07820c97fabd54d",
-        1
-      );
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      const account = accounts[0];
-      console.log(account);
-      // const coinbase = await web3.eth.getCoinbase();
-      // if (!coinbase) {
-      //   this.$vs.notify({
-      //     title: this.$t("Login.notify.title"),
-      //     text: this.$t("Metamasklogin.activate"),
-      //     iconPack: "feather",
-      //     icon: "icon-alert-circle",
-      //     color: "warning",
-      //   });
-      // }
-      this.publicAddress = account.toLowerCase();
-      this.publicAddress = account.toLowerCase();
-      this.$store.dispatch("updateWalletInfo", {
-        walletAddress: this.publicAddress,
-      });
-      if (this.walletAddress.slice(0, 5)) {
-        this.$router.push("/account-type");
-        this.wallet = false;
-      }
-    },
     async connectunstopableDomain() {
       const uauth = new UAuth({
         clientID: "332bb91f-49d2-4dae-ae6a-896a38905409",
-        redirectUri: "http://localhost",
+        redirectUri: "https://banked.getboarded.com/",
       });
 
       uauth
@@ -258,7 +259,7 @@ export default {
         });
       } else {
         if (type === "metamask") {
-          this.connectMetaMask(web3);
+          return this.connectMetaMask(web3);
         } else if (type === "walletConnect") {
           this.walletConnect(web3);
         } else if (type === "coinbaseWallet") {
