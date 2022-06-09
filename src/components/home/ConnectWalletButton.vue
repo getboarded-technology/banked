@@ -234,7 +234,7 @@ export default {
     async connectunstopableDomain() {
       const uauth = new UAuth({
         clientID: "332bb91f-49d2-4dae-ae6a-896a38905409",
-        redirectUri: "https://banked.getboarded.com/",
+        redirectUri: "https://banked.getboarded.com",
       });
 
       uauth
